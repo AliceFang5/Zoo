@@ -49,6 +49,10 @@ class listCell: UITableViewCell {
                     DispatchQueue.main.async {
                         self.picImageView.image = image
                     }
+                }else{
+                    DispatchQueue.main.async {
+                        self.picImageView.image = UIImage(named: "sorry")
+                    }
                 }
             }.resume()
         }

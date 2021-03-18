@@ -23,9 +23,13 @@ class plantDetailViewController: UIViewController {
         let urlStr = plant?.picURL!.replacingOccurrences(of: "http:", with: "https:")
         if let url = URL(string: urlStr!){
             URLSession.shared.dataTask(with: url) { (data, response, error) in
-                if let data = data{
+                if let data = data, let image = UIImage(data: data){
                     DispatchQueue.main.async {
-                        self.plantImageView.image = UIImage(data: data)
+                        self.plantImageView.image = image
+                    }
+                }else{
+                    DispatchQueue.main.async {
+                        self.plantImageView.image = UIImage(named: "sorry")
                     }
                 }
             }.resume()
