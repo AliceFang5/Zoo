@@ -21,18 +21,18 @@ class listCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
     }
     func update(with house:House){
         nameLabel.text = house.name
         infoLabel.text = house.info
         memoLabel.text = house.memo == "" ? "無休館資訊" : house.memo
-        let urlStr = house.picURL!.replacingOccurrences(of: "http:", with: "https:")
-        if let url = URL(string: urlStr){
-            URLSession.shared.dataTask(with: url) { (data, response, error) in
-                if let data = data, let image = UIImage(data: data){
+        picImageView.image = UIImage(named: "sorry")
+        if let url = URL(string: house.picURL){
+            let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            session.dataTask(with: url) { (data, response, error) in
+                if let data = data{
                     DispatchQueue.main.async {
-                        self.picImageView.image = image
+                        self.picImageView.image = UIImage(data: data)
                     }
                 }
             }.resume()
@@ -42,19 +42,25 @@ class listCell: UITableViewCell {
         nameLabel.text = plant.name
         infoLabel.text = plant.alsoKnown
         memoLabel.text = ""
-        let urlStr = plant.picURL!.replacingOccurrences(of: "http:", with: "https:")
-        if let url = URL(string: urlStr){
-            URLSession.shared.dataTask(with: url) { (data, response, error) in
+        picImageView.image = UIImage(named: "sorry")
+        if let url = URL(string: plant.picURL){
+            let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            session.dataTask(with: url) { (data, response, error) in
                 if let data = data, let image = UIImage(data: data){
                     DispatchQueue.main.async {
                         self.picImageView.image = image
                     }
-                }else{
-                    DispatchQueue.main.async {
-                        self.picImageView.image = UIImage(named: "sorry")
-                    }
                 }
             }.resume()
         }
+    }
+}
+
+extension listCell: URLSessionDelegate {
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+//        print("*** received SESSION challenge...\(challenge)")
+        let trust = challenge.protectionSpace.serverTrust!
+        let credential = URLCredential(trust: trust)
+        completionHandler(.useCredential, credential)
     }
 }

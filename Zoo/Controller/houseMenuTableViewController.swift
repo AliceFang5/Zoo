@@ -6,13 +6,18 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class houseMenuTableViewController: UITableViewController {
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let realm = try! Realm()
+    //realm results
+    var houseResults : Results<House>?
+    var plantResults : Results<Plant>?
+    //data from api
     var houseArray = [House]()
-    var houseSet : Set<String> = []
     var plantArray = [Plant]()
+    //avoid to save same item into realm
+    var houseSet : Set<String> = []
     var plantSet : Set<String> = []
 
     override func viewDidLoad() {
@@ -22,12 +27,13 @@ class houseMenuTableViewController: UITableViewController {
         title = "台北市立動物園"
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
 
-        loadHouseFromCoreData()
+        loadHouseFromRealmData()
         loadHouseFromApi()
-//        deleteHouseCoreData()//for demo, need execute loadHouseFromCoreData first
-        loadPlantFromCordData()
+        loadPlantFromRealmData()
         loadPlantFromApi()
-//        deletePlantCoreData()//for demo, need execute loadPlantFromCordData first
+        //for debug
+//        deleteHouseData()
+//        deletePlantData()
     }
 
     // MARK: - Table view data source
@@ -37,13 +43,14 @@ class houseMenuTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return houseArray.count
+        return houseResults!.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.listCellIdentifier, for: indexPath) as! listCell
-        let house = houseArray[indexPath.row]
-        cell.update(with:house)
+        if let house = houseResults?[indexPath.row]{
+            cell.update(with:house)
+        }
         return cell
     }
     
@@ -58,58 +65,62 @@ class houseMenuTableViewController: UITableViewController {
         if segue.identifier == K.houseDetailSegue{
             if let indexPath = tableView.indexPathForSelectedRow{
                 let destinationVC = segue.destination as! houseDetailViewController
-                destinationVC.house = houseArray[indexPath.row]
+                destinationVC.house = houseResults?[indexPath.row]
             }
         }
     }
     
     //MARK: - Data Manipulation Methods
     
-    func saveHouseCoreData(){
+    func saveHouseData(){
         print(#function)
-        do{
-            try context.save()
-        }catch{
-            print("Saving house err:\(error)")
+        houseArray.forEach { (house) in
+//            print(house)
+            do{
+                try realm.write{
+                    realm.add(house)
+                }
+            }catch{
+                print("Saving house err:\(error)")
+            }
         }
+        tableView.reloadData()
     }
-    func savePlantCoreData(){
+    func savePlantData(){
         print(#function)
-        do {
-            try context.save()
-        }catch{
-            print("Saving plant err:\(error)")
-        }
-    }
-    func loadHouseFromCoreData(){
-        do {
-            let request:NSFetchRequest<House> = House.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-            houseArray = try context.fetch(request)
-            print("Core data houseArray.count:\(houseArray.count)")
-            tableView.reloadData()
-            
-            for house in houseArray{
-                houseSet.insert(house.name!)
+        plantArray.forEach { (plant) in
+//            print(plant)
+            do{
+                try realm.write{
+                    realm.add(plant)
+                }
+            }catch{
+                print("Saving plant err:\(error)")
             }
-            print("houseSet:\(houseSet)")
-        } catch {
-            print("Fetching house err:\(error)")
         }
+//        tableView.reloadData()//this view controller don't need to show plant data
     }
-    func loadPlantFromCordData(){
-        do{
-            let request:NSFetchRequest<Plant> = Plant.fetchRequest()
-            plantArray = try context.fetch(request)
-            print("Core data plantArray.count:\(plantArray.count)")
-            
-            for plant in plantArray{
-                plantSet.insert(plant.name!)
-            }
-            print("plantSet:\(plantSet)")
-        }catch{
-            print("Fetch context err with \(error)")
-        }
+    func loadHouseFromRealmData(){
+        houseResults = realm.objects(House.self)
+//        print(houseResults)
+        houseResults = houseResults?.sorted(byKeyPath: "picURL", ascending: true)
+//        print(houseResults)
+        houseResults?.forEach({ (house) in
+            houseSet.insert(house.name)
+        })
+        print("houseSet:\(houseSet)")
+        tableView.reloadData()
+    }
+    func loadPlantFromRealmData(){
+        plantResults = realm.objects(Plant.self)
+//        print(plantResults)
+        plantResults = plantResults?.sorted(byKeyPath: "picURL", ascending: true)
+//        print(plantResults)
+        plantResults?.forEach({ (plant) in
+            plantSet.insert(plant.name)
+        })
+        print("plantSet:\(plantSet)")
+//        tableView.reloadData()//this view controller don't need to show plant data
     }
     func loadHouseFromApi(){
         print(#function)
@@ -126,26 +137,23 @@ class houseMenuTableViewController: UITableViewController {
                     print(houseList[0].E_Memo)
                     print(houseList[0].E_Pic_URL)
                     print(houseList[0].E_URL)
+                    self.houseArray = []
                     houseList.forEach { (house) in
-                        let newItem = House(context: self.context)
+                        let newItem = House()
                         newItem.name = house.E_Name
                         newItem.category = house.E_Category
                         newItem.info = house.E_Info
                         newItem.memo = house.E_Memo
                         newItem.picURL = house.E_Pic_URL
                         newItem.url = house.E_URL
-                        
-                        if(self.houseSet.insert(newItem.name!).inserted){
+                        //avoid to save same item into realm
+                        if(self.houseSet.insert(newItem.name).inserted){
                             self.houseArray.append(newItem)
-//                            print("houseSet insert return true")
-                        }else{
-//                            print("houseSet insert return false")
-                            self.context.delete(newItem)
                         }
                     }
-                    self.saveHouseCoreData()
                     DispatchQueue.main.async {
-                        self.tableView.reloadData()
+                        //execute saveHouseData() in DispatchQueue.main.async due to runtime error: Realm accessed from incorrect thread
+                        self.saveHouseData()
                     }
                 }
             }
@@ -156,7 +164,6 @@ class houseMenuTableViewController: UITableViewController {
         let urlStr = "https://data.taipei/api/v1/dataset/f18de02f-b6c9-47c0-8cda-50efad621c14?scope=resourceAquire&limit=230"
         if let url = URL(string: urlStr){
             let task = URLSession.shared.dataTask(with: url) { (data, request, err) in
-                
                 if let data = data, let plantData = try? JSONDecoder().decode(PlantResult.self, from: data){
                     let plantList = plantData.result.results
                     print("load plant from API done:")
@@ -170,8 +177,9 @@ class houseMenuTableViewController: UITableViewController {
                     print(plantList[0].F_Function＆Application)
                     print(plantList[0].F_Update)
                     print(plantList[0].F_Location)
+                    self.plantArray = []
                     plantList.forEach { (plant) in
-                        let newItem = Plant(context: self.context)
+                        let newItem = Plant()
                         newItem.name = plant.F_Name_Ch
                         newItem.name_en = plant.F_Name_En
                         newItem.location = plant.F_Location
@@ -181,62 +189,39 @@ class houseMenuTableViewController: UITableViewController {
                         newItem.function = plant.F_Function＆Application
                         newItem.picURL = plant.F_Pic01_URL
                         newItem.update = plant.F_Update
-                        
-                        if(self.plantSet.insert(newItem.name!).inserted){
+                        //avoid to save same item into realm
+                        if(self.plantSet.insert(newItem.name).inserted){
                             self.plantArray.append(newItem)
-//                            print("plantSet insert return true")
-                        }else{
-//                            print("plantSet insert return false")
-                            self.context.delete(newItem)
                         }
                     }
-                    self.savePlantCoreData()
+                    DispatchQueue.main.async {
+                        //execute saveHouseData() in DispatchQueue.main.async due to runtime error: Realm accessed from incorrect thread
+                        self.savePlantData()
+                    }
                 }
             }
             task.resume()
         }
     }
-    func deleteHouseCoreData(){
+    func deleteHouseData(){
         print(#function)
-        for house in houseArray as [House]{
-            context.delete(house)
-        }
         do {
-            try context.save()
-        }catch{
-            print("Deleting house failure with err:\(error)")
+            try realm.write {
+                realm.delete(houseResults!)
+            }
+        } catch {
+            print("Delete houseResults to realm failure with \(error)")
         }
     }
-    func deletePlantCoreData(){
+    func deletePlantData(){
         print(#function)
-        for plant in plantArray as [Plant]{
-            context.delete(plant)
-        }
         do {
-            try context.save()
-        }catch{
-            print("Deleting plant failure with err:\(error)")
+            try realm.write {
+                realm.delete(plantResults!)
+            }
+        } catch {
+            print("Delete plantResults to realm failure with \(error)")
         }
     }
 }
-//Core Data Demo
-//C:Create
-//        let newItem = PlantItem(context: context)
-//        newItem.name = "Sun Flower"
-//        newItem.detail = "Yellow"
-//        do {
-//            try context.save()
-//        }catch{
-//            print("Saving failure with err:\(error)")
-//        }
-
-//R:Read
-//        let request : NSFetchRequest<Plant> = Plant.fetchRequest()
-//        request.returnsObjectsAsFaults = false
-//        do{
-//            itemArray = try context.fetch(request)
-//            print(itemArray[1].name)
-//        }catch{
-//            print("Fetch context err with \(error)")
-//        }
 

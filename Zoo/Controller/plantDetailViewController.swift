@@ -7,7 +7,7 @@
 
 import UIKit
 
-class plantDetailViewController: UIViewController {
+class plantDetailViewController: loadImageViewController {
     @IBOutlet weak var plantImageView: UIImageView!
     @IBOutlet weak var plantLabel: UILabel!
     var plant:Plant?
@@ -20,16 +20,14 @@ class plantDetailViewController: UIViewController {
         setPlantLabel()
     }
     func setPlantImageView(){
-        let urlStr = plant?.picURL!.replacingOccurrences(of: "http:", with: "https:")
+        plantImageView.image = UIImage(named: "sorry")
+        let urlStr = plant?.picURL.replacingOccurrences(of: "http:", with: "https:")
         if let url = URL(string: urlStr!){
-            URLSession.shared.dataTask(with: url) { (data, response, error) in
+            let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            session.dataTask(with: url) { (data, response, error) in
                 if let data = data, let image = UIImage(data: data){
                     DispatchQueue.main.async {
                         self.plantImageView.image = image
-                    }
-                }else{
-                    DispatchQueue.main.async {
-                        self.plantImageView.image = UIImage(named: "sorry")
                     }
                 }
             }.resume()

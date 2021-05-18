@@ -3,10 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4445AD4E01BE7B21F1BF7E72 /* Pods_Zoo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EC458EBBE4E28ADFBD662A0 /* Pods_Zoo.framework */; };
+		643427E12648E75B00B941DD /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 643427E02648E75B00B941DD /* House.swift */; };
+		643427E52648E8D300B941DD /* Plant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 643427E42648E8D300B941DD /* Plant.swift */; };
 		64C8D41E25EF7E5400325FC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C8D41D25EF7E5400325FC4 /* AppDelegate.swift */; };
 		64C8D42025EF7E5400325FC4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C8D41F25EF7E5400325FC4 /* SceneDelegate.swift */; };
 		64C8D42525EF7E5400325FC4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 64C8D42325EF7E5400325FC4 /* Main.storyboard */; };
@@ -18,11 +21,15 @@
 		64C8D44025EF80EA00325FC4 /* listCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C8D43E25EF80EA00325FC4 /* listCell.swift */; };
 		64C8D44125EF80EA00325FC4 /* listCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64C8D43F25EF80EA00325FC4 /* listCell.xib */; };
 		64C8D45325EF835D00325FC4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C8D45225EF835D00325FC4 /* Constants.swift */; };
-		64F4FC0025F4CFDB00BA2D17 /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 64F4FBFE25F4CFDB00BA2D17 /* CoreDataModel.xcdatamodeld */; };
+		64EDB8A72653790B00B4CF43 /* loadImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64EDB8A62653790B00B4CF43 /* loadImageViewController.swift */; };
 		64F4FC3F25F8AE9600BA2D17 /* plantDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64F4FC3E25F8AE9600BA2D17 /* plantDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0BDE2C62364F37A77370EE36 /* Pods-Zoo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Zoo.debug.xcconfig"; path = "Target Support Files/Pods-Zoo/Pods-Zoo.debug.xcconfig"; sourceTree = "<group>"; };
+		3EC458EBBE4E28ADFBD662A0 /* Pods_Zoo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Zoo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		643427E02648E75B00B941DD /* House.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
+		643427E42648E8D300B941DD /* Plant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plant.swift; sourceTree = "<group>"; };
 		64C8D41A25EF7E5400325FC4 /* Zoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64C8D41D25EF7E5400325FC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64C8D41F25EF7E5400325FC4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -36,8 +43,9 @@
 		64C8D43E25EF80EA00325FC4 /* listCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = listCell.swift; sourceTree = "<group>"; };
 		64C8D43F25EF80EA00325FC4 /* listCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = listCell.xib; sourceTree = "<group>"; };
 		64C8D45225EF835D00325FC4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		64F4FBFF25F4CFDB00BA2D17 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		64EDB8A62653790B00B4CF43 /* loadImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loadImageViewController.swift; sourceTree = "<group>"; };
 		64F4FC3E25F8AE9600BA2D17 /* plantDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = plantDetailViewController.swift; sourceTree = "<group>"; };
+		DB50AF8512A6F416E89292E2 /* Pods-Zoo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Zoo.release.xcconfig"; path = "Target Support Files/Pods-Zoo/Pods-Zoo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,17 +53,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4445AD4E01BE7B21F1BF7E72 /* Pods_Zoo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		00E277CB20C87CA430D782B0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3EC458EBBE4E28ADFBD662A0 /* Pods_Zoo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		64C8D41125EF7E5400325FC4 = {
 			isa = PBXGroup;
 			children = (
 				64C8D41C25EF7E5400325FC4 /* Zoo */,
 				64C8D41B25EF7E5400325FC4 /* Products */,
+				E80A1C3B2FF6B4208A3810D7 /* Pods */,
+				00E277CB20C87CA430D782B0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -87,7 +106,8 @@
 			children = (
 				64C8D43B25EF7F1500325FC4 /* zooBrain.swift */,
 				64C8D45225EF835D00325FC4 /* Constants.swift */,
-				64F4FBFE25F4CFDB00BA2D17 /* CoreDataModel.xcdatamodeld */,
+				643427E02648E75B00B941DD /* House.swift */,
+				643427E42648E8D300B941DD /* Plant.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -98,6 +118,7 @@
 				64C8D43225EF7ED500325FC4 /* houseMenuTableViewController.swift */,
 				64C8D43525EF7EEC00325FC4 /* houseDetailViewController.swift */,
 				64F4FC3E25F8AE9600BA2D17 /* plantDetailViewController.swift */,
+				64EDB8A62653790B00B4CF43 /* loadImageViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -112,6 +133,15 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		E80A1C3B2FF6B4208A3810D7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0BDE2C62364F37A77370EE36 /* Pods-Zoo.debug.xcconfig */,
+				DB50AF8512A6F416E89292E2 /* Pods-Zoo.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -119,9 +149,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 64C8D42E25EF7E5700325FC4 /* Build configuration list for PBXNativeTarget "Zoo" */;
 			buildPhases = (
+				8F648F673EB401D6EBF02DA5 /* [CP] Check Pods Manifest.lock */,
 				64C8D41625EF7E5400325FC4 /* Sources */,
 				64C8D41725EF7E5400325FC4 /* Frameworks */,
 				64C8D41825EF7E5400325FC4 /* Resources */,
+				BB6957A8987640FA3EAA7BA4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -178,18 +210,62 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		8F648F673EB401D6EBF02DA5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Zoo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BB6957A8987640FA3EAA7BA4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Zoo/Pods-Zoo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Zoo/Pods-Zoo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Zoo/Pods-Zoo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		64C8D41625EF7E5400325FC4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				64C8D43625EF7EEC00325FC4 /* houseDetailViewController.swift in Sources */,
+				64EDB8A72653790B00B4CF43 /* loadImageViewController.swift in Sources */,
 				64C8D43325EF7ED500325FC4 /* houseMenuTableViewController.swift in Sources */,
 				64F4FC3F25F8AE9600BA2D17 /* plantDetailViewController.swift in Sources */,
+				643427E52648E8D300B941DD /* Plant.swift in Sources */,
 				64C8D41E25EF7E5400325FC4 /* AppDelegate.swift in Sources */,
 				64C8D42025EF7E5400325FC4 /* SceneDelegate.swift in Sources */,
+				643427E12648E75B00B941DD /* House.swift in Sources */,
 				64C8D43C25EF7F1500325FC4 /* zooBrain.swift in Sources */,
-				64F4FC0025F4CFDB00BA2D17 /* CoreDataModel.xcdatamodeld in Sources */,
 				64C8D44025EF80EA00325FC4 /* listCell.swift in Sources */,
 				64C8D45325EF835D00325FC4 /* Constants.swift in Sources */,
 			);
@@ -335,6 +411,7 @@
 		};
 		64C8D42F25EF7E5700325FC4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0BDE2C62364F37A77370EE36 /* Pods-Zoo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -354,6 +431,7 @@
 		};
 		64C8D43025EF7E5700325FC4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB50AF8512A6F416E89292E2 /* Pods-Zoo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -393,19 +471,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		64F4FBFE25F4CFDB00BA2D17 /* CoreDataModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				64F4FBFF25F4CFDB00BA2D17 /* DataModel.xcdatamodel */,
-			);
-			currentVersion = 64F4FBFF25F4CFDB00BA2D17 /* DataModel.xcdatamodel */;
-			path = CoreDataModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 64C8D41225EF7E5400325FC4 /* Project object */;
 }

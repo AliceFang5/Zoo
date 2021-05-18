@@ -6,17 +6,16 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 import SafariServices
 
-class houseDetailViewController: UIViewController, SFSafariViewControllerDelegate, UIScrollViewDelegate {
-    
+class houseDetailViewController: loadImageViewController, SFSafariViewControllerDelegate, UIScrollViewDelegate {
+    let realm = try! Realm()
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tableHeight: NSLayoutConstraint!
     
-    var plantArray = [Plant]()
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var plantResults : Results<Plant>?
 
     var house : House?{
         didSet{
@@ -38,19 +37,19 @@ class houseDetailViewController: UIViewController, SFSafariViewControllerDelegat
         tableView.register(UINib(nibName: K.listCellNibName, bundle: nil), forCellReuseIdentifier: K.listCellIdentifier)
 
         //Set table height to cover entire view
-        print(tableView.rowHeight)
-        tableHeight.constant = CGFloat(plantArray.count) * 120//rowHeight = 120
+//        print(tableView.rowHeight)//value = -1
+        tableHeight.constant = CGFloat(plantResults!.count) * 120//rowHeight = 120
         tableView.isScrollEnabled = false
         scrollView.bounces = false
         
         setHouseDetail()
     }
     override func viewWillAppear(_ animated: Bool) {
-        print(#function)
-//        print(tableView.rowHeight)
+//        print(#function)
+//        print(tableView.rowHeight)//value = -1
     }
     @IBAction func showSafariButtonPressed(_ sender: UIButton) {
-        let urlStr = house?.url?.replacingOccurrences(of: "http:", with: "https:")
+        let urlStr = house?.url.replacingOccurrences(of: "http:", with: "https:")
         if let url = URL(string: urlStr!){
             let safari = SFSafariViewController(url: url)
             safari.delegate = self
@@ -59,9 +58,13 @@ class houseDetailViewController: UIViewController, SFSafariViewControllerDelegat
     }
     func setHouseDetail(){
         title = house!.name
-        let urlStr = house?.picURL!.replacingOccurrences(of: "http:", with: "https:")
-        if let url = URL(string: urlStr!){
-            URLSession.shared.dataTask(with: url) { (data, response, error) in
+        houseInfo.text = house?.info
+        houseMemo.text = house?.memo == "" ? "無休館資訊" : house?.memo
+        houseCategory.text = house?.category
+        
+        if let url = URL(string: house!.picURL){
+            let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            session.dataTask(with: url) { (data, response, error) in
                 if let data = data{
                     DispatchQueue.main.async {
                         self.houseImage.image = UIImage(data: data)
@@ -69,24 +72,15 @@ class houseDetailViewController: UIViewController, SFSafariViewControllerDelegat
                 }
             }.resume()
         }
-        houseInfo.text = house?.info
-        houseMemo.text = house?.memo == "" ? "無休館資訊" : house?.memo
-        houseCategory.text = house?.category
     }
     
     //MARK: - Data Manipulation Methods
     
     func loadPlant(with location:String){
-        let request:NSFetchRequest<Plant> = Plant.fetchRequest()
-    //        request.returnsObjectsAsFaults = false
-        request.predicate = NSPredicate(format: "location CONTAINS %@", location)
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        do{
-            plantArray = try context.fetch(request)
-            print("plantCount:\(plantArray.count)")
-        }catch{
-            print("Fetch context err with \(error)")
-        }
+        plantResults = realm.objects(Plant.self)
+        plantResults = plantResults?.filter(NSPredicate(format: "location CONTAINS %@", location))
+        plantResults = plantResults?.sorted(byKeyPath: "picURL", ascending: true)
+//        print(plantResults)
     }
 }
 
@@ -94,11 +88,13 @@ class houseDetailViewController: UIViewController, SFSafariViewControllerDelegat
 
 extension houseDetailViewController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        plantArray.count
+        plantResults!.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.listCellIdentifier, for: indexPath) as! listCell
-        cell.update(with: plantArray[indexPath.row])
+        if let row = plantResults?[indexPath.row]{
+            cell.update(with: row)
+        }
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -109,8 +105,9 @@ extension houseDetailViewController: UITableViewDelegate,UITableViewDataSource{
         if segue.identifier == K.plantDetailSegue{
             if let indexPath = tableView.indexPathForSelectedRow{
                 let destinaionVC = segue.destination as! plantDetailViewController
-                destinaionVC.plant = plantArray[indexPath.row]
+                destinaionVC.plant = plantResults?[indexPath.row]
             }
         }
     }
 }
+
