@@ -6,6 +6,7 @@ Core Data
 Reaml Data  
 Get API data, decode to JSON format  
 Show image from http  
+SafariServices，SFSafariViewController  
 Auto Layout, storyboard, xib  
 MVC  
 
